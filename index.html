@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>DCPM Delivery - Livraison rapide & fiable</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fefefe;
+      color: #1e1e2f;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.8rem;
+    }
+
+    /* Bouton principal */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #ff6b00;
+      color: white;
+      font-weight: 700;
+      padding: 0.9rem 2rem;
+      border-radius: 48px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 8px 18px rgba(255, 107, 0, 0.2);
+    }
+
+    .btn i {
+      font-size: 1.1rem;
+    }
+
+    .btn:hover {
+      background: #e05d00;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px rgba(255, 107, 0, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ff6b00;
+      color: #ff6b00;
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: #ff6b00;
+      color: white;
+    }
+
+    /* Header */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: #ff6b00;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #2d2f3b;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #ff6b00;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 3rem 0 4rem 0;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-badge {
+      background: #ffede3;
+      color: #ff6b00;
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-content h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #4a4a5a;
+      margin-bottom: 2rem;
+      max-width: 90%;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: #ff6b00;
+    }
+
+    .hero-image {
+      flex: 0.9;
+      text-align: center;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      border-radius: 48px;
+      filter: drop-shadow(0 20px 25px rgba(0,0,0,0.05));
+    }
+
+    /* sections communes */
+    section {
+      padding: 5rem 0;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-title span {
+      color: #ff6b00;
+    }
+
+    /* Services / Partenaires */
+    .services-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      flex: 1 1 260px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+      transition: 0.2s;
+      border: 1px solid #f0f0f0;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      border-color: #ffd9c4;
+    }
+    .service-card i {
+      font-size: 2.8rem;
+      color: #ff6b00;
+      margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.7rem;
+    }
+
+    /* Partners */
+    .partners {
+      background: #faf7f2;
+      border-radius: 48px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    .partners-logos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.5rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    .partner-item {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: white;
+      padding: 0.7rem 1.8rem;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.02);
+    }
+    .partner-item i {
+      font-size: 1.7rem;
+      color: #ff6b00;
+    }
+
+    /* Pourquoi nous */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .feature {
+      background: white;
+      padding: 1.8rem;
+      border-radius: 28px;
+      border-left: 5px solid #ff6b00;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+    }
+    .feature i {
+      font-size: 2rem;
+      color: #ff6b00;
+      margin-bottom: 1rem;
+    }
+
+    /* zone contact / cta */
+    .cta-section {
+      background: linear-gradient(135deg, #1e1e2f 0%, #2a2a3b 100%);
+      color: white;
+      border-radius: 48px;
+      text-align: center;
+      padding: 3.5rem 2rem;
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .cta-section .btn {
+      margin-top: 1rem;
+    }
+    .contact-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+      justify-content: space-between;
+    }
+    .contact-info {
+      flex: 1;
+      background: white;
+      border-radius: 28px;
+      padding: 2rem;
+      color: #1e1e2f;
+    }
+    .contact-info h3 {
+      margin-bottom: 1rem;
+      font-size: 1.6rem;
+    }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .contact-detail i {
+      font-size: 1.5rem;
+      color: #ff6b00;
+      width: 2rem;
+    }
+    .contact-form {
+      flex: 1;
+      background: white;
+      border-radius: 28px;
+      padding: 2rem;
+      color: #1e1e2f;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 40px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    textarea {
+      border-radius: 28px;
+      resize: vertical;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #ff6b00;
+    }
+    button[type="submit"] {
+      background: #ff6b00;
+      width: 100%;
+      border: none;
+      padding: 0.9rem;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 40px;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid #ececec;
+      margin-top: 2rem;
+      color: #6c6c7a;
+    }
+
+    @media (max-width: 800px) {
+      .hero-content h1 {
+        font-size: 2.4rem;
+      }
+      .navbar {
+        flex-direction: column;
+      }
+      .hero-stats {
+        flex-wrap: wrap;
+      }
+      .container {
+        padding: 0 1.2rem;
+      }
+      .section-title {
+        font-size: 1.9rem;
+      }
+    }
+    .map-placeholder {
+      background: #eaeef3;
+      border-radius: 28px;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <h1>DCPM <span>Delivery</span></h1>
+      </div>
+      <div class="nav-links">
+        <a href="#accueil">Accueil</a>
+        <a href="#services">Services</a>
+        <a href="#pourquoi">Pourquoi nous</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="btn-outline btn" style="padding:0.6rem 1.5rem;">Devis express</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero section -->
+  <section id="accueil">
+    <div class="container hero">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-motorcycle"></i> Livraison 7j/7 – rapide & pro</div>
+        <h1>Vos plats, colis,<br> en <span style="color:#ff6b00;">un temps record</span></h1>
+        <p>DCPM Delivery, votre partenaire micro-entreprise experte sur Uber Eats, Deliveroo et plateformes locales. Une équipe de coursiers passionnés pour satisfaire vos clients.</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-number">15 min</span><span>temps moyen</span></div>
+          <div class="stat"><span class="stat-number">98%</span><span>commandes à l'heure</span></div>
+          <div class="stat"><span class="stat-number">24/7</span><span>disponible</span></div>
+        </div>
+        <div style="margin-top: 2rem;">
+          <a href="#contact" class="btn"><i class="fas fa-truck-fast"></i> Commander une livraison</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <!-- illustration stylisée -->
+        <img src="https://placehold.co/600x500/FFF5EB/ff6b00?text=🚚+DCPM+Delivery" alt="Coursier DCPM" style="background: #fff0e4; border-radius: 48px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- services -->
+  <section id="services">
+    <div class="container">
+      <div class="section-title">Nos <span>services</span> de livraison</div>
+      <div class="services-grid">
+        <div class="service-card"><i class="fas fa-utensils"></i><h3>Repas & plats</h3><p>Uber Eats, Deliveroo, Just Eat — livraison de restaurants partenaires.</p></div>
+        <div class="service-card"><i class="fas fa-shopping-bag"></i><h3>Courses & colis</h3><p>Petits colis, courses express, pharmacie, et tout ce dont vous avez besoin.</p></div>
+        <div class="service-card"><i class="fas fa-clock"></i><h3>Livraison programmée</h3><p>Créneaux horaires adaptés à vos besoins, pour les professionnels.</p></div>
+        <div class="service-card"><i class="fas fa-charging-station"></i><h3>Fleet management</h3><p>Gestion de flotte pour restaurateurs : optimisation des tournées.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partenaires Uber eats + deliveroo etc -->
+  <div class="container" style="margin-bottom: 1rem;">
+    <div class="partners">
+      <h3 style="font-size:1.7rem; font-weight:700;">Partenaires officiels & plateformes</h3>
+      <div class="partners-logos">
+        <div class="partner-item"><i class="fab fa-uber"></i> Uber Eats</div>
+        <div class="partner-item"><i class="fas fa-motorcycle"></i> Deliveroo</div>
+        <div class="partner-item"><i class="fas fa-hamburger"></i> Just Eat</div>
+        <div class="partner-item"><i class="fas fa-store"></i> Commerces locaux</div>
+      </div>
+      <p style="margin-top:1rem;">DCPM Delivery est référencé et certifié pour assurer vos livraisons sur les plus grandes plateformes.</p>
+    </div>
+  </div>
+
+  <!-- Pourquoi nous -->
+  <section id="pourquoi">
+    <div class="container">
+      <div class="section-title">Pourquoi choisir <span>DCPM Delivery ?</span></div>
+      <div class="features-grid">
+        <div class="feature"><i class="fas fa-gauge-high"></i><h3>Ultra réactif</h3><p>Courseurs géolocalisés, délais réduits, suivi en temps réel.</p></div>
+        <div class="feature"><i class="fas fa-hand-holding-heart"></i><h3>Service personnalisé</h3><p>Micro-entreprise à l'écoute, réponse rapide et tarifs flexibles.</p></div>
+        <div class="feature"><i class="fas fa-shield-alt"></i><h3>Assurance pro</h3><p>Livraison assurée, colis protégés, tranquillité d'esprit.</p></div>
+        <div class="feature"><i class="fas fa-euro-sign"></i><h3>Prix compétitifs</h3><p>Forfaits adaptés aux restaurateurs et particuliers réguliers.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- zone chiffres / témoignage mini -->
+  <div class="container">
+    <div style="background:#fcf7f0; border-radius: 40px; padding: 2.2rem; text-align: center; margin: 1rem 0 2rem;">
+      <i class="fas fa-quote-left" style="font-size:2rem; color:#ff6b00; opacity:0.5;"></i>
+      <p style="font-size:1.3rem; max-width:700px; margin:1rem auto; font-style:italic;">“DCPM Delivery a augmenté notre satisfaction client de 30% grâce à des livraisons ultra-fiables sur Uber Eats.”</p>
+      <p style="font-weight:600;">— Chez Saveurs & Co, restaurant partenaire</p>
+    </div>
+  </div>
+
+  <!-- Contact + formulaire + devis -->
+  <section id="contact">
+    <div class="container">
+      <div class="cta-section">
+        <h2>Prêt à booster votre activité ?</h2>
+        <p>Devenez partenaire DCPM Delivery ou commandez une livraison dès maintenant.</p>
+        <div class="contact-flex">
+          <div class="contact-info">
+            <h3><i class="fas fa-address-card"></i> Coordonnées</h3>
+            <div class="contact-detail"><i class="fas fa-map-pin"></i> <span>12 Rue de la Logistique, 75001 Paris</span></div>
+            <div class="contact-detail"><i class="fas fa-phone-alt"></i> <span>+33 1 23 45 67 89</span></div>
+            <div class="contact-detail"><i class="fas fa-envelope"></i> <span>contact@dcpm-delivery.fr</span></div>
+            <div class="contact-detail"><i class="fab fa-whatsapp"></i> <span>07 68 12 34 56 (WhatsApp pro)</span></div>
+            <div class="map-placeholder">
+              <i class="fas fa-location-dot"></i> Intervention sur toute l'Île-de-France & Lyon (bientôt national)
+            </div>
+          </div>
+          <div class="contact-form">
+            <h3>Demande de devis express</h3>
+            <form id="devisForm">
+              <div class="input-group"><input type="text" id="name" placeholder="Nom / Restaurant" required></div>
+              <div class="input-group"><input type="email" id="email" placeholder="Email professionnel" required></div>
+              <div class="input-group"><input type="tel" id="phone" placeholder="Téléphone"></div>
+              <div class="input-group"><textarea rows="3" id="message" placeholder="Décrivez votre besoin (livraison ponctuelle, contrat avec plateforme, volume... )"></textarea></div>
+              <button type="submit" id="submitBtn">Envoyer la demande <i class="fas fa-paper-plane"></i></button>
+              <p style="font-size:0.75rem; margin-top:1rem; text-align:center;">Réponse sous 2h ouvrées</p>
+            </form>
+            <div id="formFeedback" style="margin-top:1rem; font-weight:500;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>© 2025 DCPM Delivery — Micro-entreprise de livraison agréée Uber Eats, Deliveroo & partenaires locaux.</p>
+    <p style="margin-top:0.5rem;"><i class="fas fa-bicycle"></i> Livraison rapide, transparente, éco-responsable</p>
+  </div>
+</footer>
+
+<script>
+  // simple interactive pour le formulaire
+  const form = document.getElementById('devisForm');
+  const feedbackDiv = document.getElementById('formFeedback');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if(!name || !email) {
+      feedbackDiv.innerHTML = '<span style="color:#ff6b00;">⚠️ Veuillez renseigner nom et email valides.</span>';
+      return;
+    }
+    if(!email.includes('@') || !email.includes('.')) {
+      feedbackDiv.innerHTML = '<span style="color:#ff6b00;">📧 Email invalide.</span>';
+      return;
+    }
+
+    // simulation d'envoi
+    feedbackDiv.innerHTML = '<span style="color:green;">✅ Merci ' + name + ' ! Votre demande a bien été envoyée. Un conseiller DCPM vous recontactera sous 24h.</span>';
+    form.reset();
+    // On efface le message après 5 secondes
+    setTimeout(() => {
+      if(feedbackDiv) feedbackDiv.innerHTML = '';
+    }, 5000);
+  });
+
+  // Gestion du scroll fluide pour les ancres
+  document.querySelectorAll('.nav-links a, .btn[href^="#"], .btn-outline[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if(targetId && targetId !== "#" && targetId.startsWith('#')) {
+        e.preventDefault();
+        const targetElement = document.querySelector(targetId);
+        if(targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>

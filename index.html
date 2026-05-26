@@ -9,13 +9,13 @@
 </head>
 <body>
     <div id="app">
-        <!-- EN-TÊTE AVEC TIMER EXTERNE (visuel) -->
+        <!-- EN-TÊTE -->
         <div id="top-bar">
             <div class="logo">⚠️ PROTOCOLE ARGOS ⚠️</div>
             <div class="timer-visual">
                 <span class="timer-label">TIMER EXTERNE</span>
-                <div class="timer-led active"></div>
-                <span class="timer-status">ACTIF</span>
+                <div class="timer-led active" id="timer-led"></div>
+                <span class="timer-status" id="timer-status-text">ACTIF</span>
             </div>
             <div class="progress-indicator">
                 <span id="progress-text">Épreuve 1/4</span>
@@ -30,239 +30,276 @@
 
         <!-- ZONE DE JEU PRINCIPALE -->
         <div id="game-area">
-            <!-- ÉPREUVE 1 : SALLE ASCII -->
+            <!-- ÉPREUVE 1 : TABLE ASCII -->
             <div id="epreuve1" class="epreuve active">
                 <div class="room-header">
-                    <h2>🖥️ SALLE DES SERVEURS - ASCII TERMINAL</h2>
-                    <div class="room-code">ACCÈS NIVEAU 1</div>
+                    <h2>🖥️ LABO ASCII - Terminal 1984</h2>
+                    <div class="room-code">NIVEAU 1</div>
                 </div>
                 <div class="room-content">
-                    <div class="interactive-object" data-object="ascii-panel">
+                    <div class="interactive-object" data-object="ascii-terminal" data-level="1">
                         <div class="object-icon">📟</div>
-                        <div class="object-name">Terminal hérité</div>
+                        <div class="object-name">Terminal</div>
                     </div>
-                    <div class="interactive-object" data-object="poster">
+                    <div class="interactive-object" data-object="ascii-poster" data-level="1">
                         <div class="object-icon">📜</div>
-                        <div class="object-name">Vieux poster</div>
+                        <div class="object-name">Tableau pédagogique</div>
                     </div>
-                    <div class="interactive-object" data-object="computer">
+                    <div class="interactive-object" data-object="ascii-computer" data-level="1">
                         <div class="object-icon">💻</div>
-                        <div class="object-name">Ordinateur central</div>
+                        <div class="object-name">Ordinateur</div>
                     </div>
                 </div>
                 <div class="room-view" id="view1">
-                    <div class="view-content hidden" id="view-ascii-panel">
+                    <div class="view-content hidden" id="view-ascii-terminal">
                         <div class="close-view">✖</div>
                         <h3>📟 TERMINAL ASCII</h3>
                         <div class="ascii-art">
 ╔══════════════════════════════════════════════════════╗
-║  LOGS SYSTEME - 1984                                 ║
+║  >> LOGS SYSTEME v1.0                               ║
 ║                                                      ║
-║  MESSAGE ENCODÉ :                                    ║
+║  Message encodé :                                    ║
 ║                                                      ║
-║  83 84 78 32 69 115 116 32 108 101                  ║
-║  32 99 111 100 101 32 100 101 32                    ║
-║  108 97 32 112 114 101 109 105 101 114 101           ║
-║  32 101 112 114 101 117 118 101 32 101 115 116       ║
-║  58 32 83                                            ║
+║  83  84  78  32  69  115  116  32  108 101           ║
+║  32  99  111  100  101  32  100  101  32             ║
+║  108  97  32  112  114  101  109  105 101 114        ║
+║  101  32  101  115  116  32  58  32  83              ║
 ║                                                      ║
-║  [CONVERTIR ASCII POUR DÉCODER]                      ║
+║  [ Table ASCII : 65=A, 66=B, 67=C ... ]              ║
 ╚══════════════════════════════════════════════════════╝
                         </div>
                         <div class="puzzle-input">
-                            <label>🔐 Quel est le message ? (une seule lettre)</label>
-                            <input type="text" id="puzzle1-input" maxlength="1" placeholder="?">
+                            <label>🔐 Quelle est la LETTRE finale du message décodé ?</label>
+                            <input type="text" id="puzzle1-input" maxlength="1" placeholder="Lettre majuscule">
                             <button id="puzzle1-submit">VALIDER</button>
                             <div class="puzzle-feedback" id="puzzle1-feedback"></div>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-poster">
+                    <div class="view-content hidden" id="view-ascii-poster">
                         <div class="close-view">✖</div>
-                        <h3>📜 POSTER MURAL</h3>
+                        <h3>📜 TABLE ASCII</h3>
                         <div class="poster-content">
-                            <p>"Le code ASCII utilise 7 ou 8 bits pour représenter les caractères.<br>
-                            En décimal, 65 = A, 66 = B, ... 83 = S, 84 = T, 78 = N."</p>
-                            <p class="hint-written">✍️ Une annotation manuscrite : "Le premier code est la première lettre du message"</p>
+                            <pre>
+┌─────┬─────┬─────┬─────┐
+│ 65  │ 66  │ 67  │ 68  │
+│ A   │ B   │ C   │ D   │
+├─────┼─────┼─────┼─────┤
+│ 69  │ 70  │ 71  │ 72  │
+│ E   │ F   │ G   │ H   │
+├─────┼─────┼─────┼─────┤
+│ 73  │ 74  │ 75  │ 76  │
+│ I   │ J   │ K   │ L   │
+├─────┼─────┼─────┼─────┤
+│ 77  │ 78  │ 79  │ 80  │
+│ M   │ N   │ O   │ P   │
+├─────┼─────┼─────┼─────┤
+│ 81  │ 82  │ 83  │ 84  │
+│ Q   │ R   │ S   │ T   │
+├─────┼─────┼─────┼─────┤
+│ 85  │ 86  │ 87  │ 88  │
+│ U   │ V   │ W   │ X   │
+├─────┼─────┼─────┼─────┤
+│ 89  │ 90  │     │     │
+│ Y   │ Z   │     │     │
+└─────┴─────┴─────┴─────┘
+                            </pre>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-computer">
+                    <div class="view-content hidden" id="view-ascii-computer">
                         <div class="close-view">✖</div>
-                        <h3>💻 ORDINATEUR CENTRAL</h3>
+                        <h3>💻 ORDINATEUR</h3>
                         <div class="computer-screen">
                             <p>> Accès restreint</p>
-                            <p>> Niveau 1 verrouillé</p>
-                            <p>> Trouvez la lettre codée dans les logs</p>
+                            <p>> Niveau 1 : Décoder le message ASCII</p>
+                            <p>> Indice: 83 = S, 84 = T, 78 = N</p>
                             <div class="blinking-cursor">_</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ÉPREUVE 2 : SALLE RÉSEAU -->
+            <!-- ÉPREUVE 2 : RÉSEAU ET BINAIRE -->
             <div id="epreuve2" class="epreuve">
                 <div class="room-header">
-                    <h2>🌐 SALLE RÉSEAU - COMMUTATEUR CISCO</h2>
-                    <div class="room-code">ACCÈS NIVEAU 2</div>
+                    <h2>🌐 SALLE RÉSEAU - Routeur Cisco</h2>
+                    <div class="room-code">NIVEAU 2</div>
                 </div>
                 <div class="room-content">
-                    <div class="interactive-object" data-object="router">
+                    <div class="interactive-object" data-object="router-config" data-level="2">
                         <div class="object-icon">📡</div>
-                        <div class="object-name">Routeur principal</div>
+                        <div class="object-name">Routeur</div>
                     </div>
-                    <div class="interactive-object" data-object="switch">
+                    <div class="interactive-object" data-object="switch-info" data-level="2">
                         <div class="object-icon">🔌</div>
-                        <div class="object-name">Commutateur réseau</div>
+                        <div class="object-name">Commutateur</div>
                     </div>
-                    <div class="interactive-object" data-object="cable">
+                    <div class="interactive-object" data-object="cable-info" data-level="2">
                         <div class="object-icon">🔗</div>
-                        <div class="object-name">Câble ethernet</div>
+                        <div class="object-name">Documentation</div>
                     </div>
                 </div>
                 <div class="room-view" id="view2">
-                    <div class="view-content hidden" id="view-router">
+                    <div class="view-content hidden" id="view-router-config">
                         <div class="close-view">✖</div>
                         <h3>📡 ROUTEUR PRINCIPAL</h3>
                         <div class="config-panel">
-                            <div class="config-line">Interface IP: 10.0.1.25</div>
-                            <div class="config-line">Subnet Mask: 255.255.255.240</div>
-                            <div class="config-line">Gateway: 10.0.1.1</div>
+                            <div class="config-line">Interface IP: 192.168.10.42</div>
+                            <div class="config-line">Subnet Mask: 255.255.255.224</div>
+                            <div class="config-line">Gateway: 192.168.10.1</div>
                             <div class="config-line">━━━━━━━━━━━━━━━━━━</div>
-                            <div class="config-line">[CONFIGURATION CACHÉE]</div>
-                            <div class="config-line">Adresse réseau : ???.???.???.???</div>
+                            <div class="config-line">[CONFIGURATION]</div>
+                            <div class="config-line">Adresse réseau = IP & Masque</div>
+                            <div class="config-line">Dernier octet en BINAIRE ?</div>
                         </div>
                         <div class="puzzle-input">
-                            <label>🔐 Quelle est l'adresse RÉSEAU (en binaire sur le dernier octet) ?</label>
-                            <input type="text" id="puzzle2-input" placeholder="8 bits binaires (ex: 00010001)">
+                            <label>🔐 Adresse réseau (dernier octet en binaire 8 bits)</label>
+                            <input type="text" id="puzzle2-input" placeholder="Ex: 00100000">
                             <button id="puzzle2-submit">VALIDER</button>
                             <div class="puzzle-feedback" id="puzzle2-feedback"></div>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-switch">
+                    <div class="view-content hidden" id="view-switch-info">
                         <div class="close-view">✖</div>
-                        <h3>🔌 COMMUTATEUR RÉSEAU</h3>
-                        <p>Les voyants clignotent. Une étiquette indique :</p>
-                        <div class="etiquette">"Adresse réseau = IP & Masque"</div>
-                        <div class="etiquette">"Convertir en binaire le dernier octet"</div>
+                        <h3>🔌 COMMUTATEUR</h3>
+                        <p>Étiquette technique :</p>
+                        <div class="etiquette">"Adresse réseau = Adresse IP AND Masque"</div>
+                        <div class="etiquette">"224 en binaire = 11100000"</div>
+                        <div class="etiquette">"42 en binaire = 00101010"</div>
                     </div>
-                    <div class="view-content hidden" id="view-cable">
+                    <div class="view-content hidden" id="view-cable-info">
                         <div class="close-view">✖</div>
-                        <h3>🔗 CÂBLE ETHERNET</h3>
-                        <p>Un tag est attaché : "Masque CIDR /28 = 255.255.255.240"</p>
-                        <p>Petit rappel : 240 en binaire = 11110000</p>
+                        <h3>🔗 DOCUMENTATION RÉSEAU</h3>
+                        <p>Rappel : Masque /27 = 255.255.255.224</p>
+                        <p>Pour trouver l'adresse réseau :</p>
+                        <p>IP 192.168.10.42 AND 255.255.255.224 = 192.168.10.32</p>
+                        <p>Dernier octet = 32 → binaire = 00100000</p>
                     </div>
                 </div>
             </div>
 
-            <!-- ÉPREUVE 3 : SALLE CRYPTO -->
+            <!-- ÉPREUVE 3 : COMPRENDRE "SNT" (Niveau 2nde) -->
             <div id="epreuve3" class="epreuve">
                 <div class="room-header">
-                    <h2>🔐 SALLE CRYPTOGRAPHIE - XOR LAB</h2>
-                    <div class="room-code">ACCÈS NIVEAU 3</div>
+                    <h2>📚 SALLE DE COURS - Culture SNT</h2>
+                    <div class="room-code">NIVEAU 3</div>
                 </div>
                 <div class="room-content">
-                    <div class="interactive-object" data-object="safe">
-                        <div class="object-icon">📦</div>
-                        <div class="object-name">Coffre-fort numérique</div>
+                    <div class="interactive-object" data-object="textbook" data-level="3">
+                        <div class="object-icon">📖</div>
+                        <div class="object-name">Manuel SNT</div>
                     </div>
-                    <div class="interactive-object" data-object="whiteboard">
+                    <div class="interactive-object" data-object="whiteboard-snt" data-level="3">
                         <div class="object-icon">📋</div>
                         <div class="object-name">Tableau blanc</div>
                     </div>
-                    <div class="interactive-object" data-object="usb">
-                        <div class="object-icon">💾</div>
-                        <div class="object-name">Clé USB</div>
+                    <div class="interactive-object" data-object="poster-snt" data-level="3">
+                        <div class="object-icon">🖼️</div>
+                        <div class="object-name">Affiche</div>
                     </div>
                 </div>
                 <div class="room-view" id="view3">
-                    <div class="view-content hidden" id="view-safe">
+                    <div class="view-content hidden" id="view-textbook">
                         <div class="close-view">✖</div>
-                        <h3>📦 COFFRE-FORT NUMÉRIQUE</h3>
-                        <div class="safe-display">
-                            <p>CODE DÉVERROUILLAGE REQUIS</p>
-                            <div class="xor-hint">Indice: S ⊕ N = ? (XOR binaire)</div>
-                            <div>S = 01010011, N = 01001110</div>
-                        </div>
-                        <div class="puzzle-input">
-                            <label>🔐 Résultat du XOR entre S et N (binaire 8 bits)</label>
-                            <input type="text" id="puzzle3-input" placeholder="8 bits binaires">
-                            <button id="puzzle3-submit">VALIDER</button>
-                            <div class="puzzle-feedback" id="puzzle3-feedback"></div>
+                        <h3>📖 MANUEL SNT</h3>
+                        <div class="book-page">
+                            <p><strong>Chapitre 1 : Qu'est-ce que la SNT ?</strong></p>
+                            <p>S.N.T. signifie <strong>Sciences Numériques et Technologie</strong>.</p>
+                            <p>C'est une matière enseignée en classe de 2nde.</p>
+                            <p>Les trois lettres forment un sigle important...</p>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-whiteboard">
+                    <div class="view-content hidden" id="view-whiteboard-snt">
                         <div class="close-view">✖</div>
                         <h3>📋 TABLEAU BLANC</h3>
                         <div class="whiteboard-text">
-                            <p>Rappel XOR :</p>
-                            <p>0 ⊕ 0 = 0</p>
-                            <p>0 ⊕ 1 = 1</p>
-                            <p>1 ⊕ 0 = 1</p>
-                            <p>1 ⊕ 1 = 0</p>
-                            <p>Exemple : 1010 ⊕ 1100 = 0110</p>
+                            <p>✏️ Quelqu'un a écrit :</p>
+                            <p style="font-size: 2rem; text-align: center; margin: 20px;">S N T</p>
+                            <p>En dessous : "Le code final est ce sigle"...</p>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-usb">
+                    <div class="view-content hidden" id="view-poster-snt">
                         <div class="close-view">✖</div>
-                        <h3>💾 CLÉ USB</h3>
-                        <p>Fichier "note.txt":</p>
-                        <div class="usb-note">"S = 83 en décimal = 01010011, N = 78 = 01001110"</div>
+                        <h3>🖼️ AFFICHE PÉDAGOGIQUE</h3>
+                        <div class="poster-content">
+                            <p>🎓 Programme de Seconde :</p>
+                            <ul>
+                                <li>Internet et le Web</li>
+                                <li>Réseaux sociaux</li>
+                                <li>Données structurées</li>
+                                <li>Algorithmique</li>
+                                <li><strong>SNT = Sciences Numériques & Technologie</strong></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ÉPREUVE 4 : SALLE FINALE - CODE BINAIRE SNT -->
+            <!-- ÉPREUVE 4 : CODE FINAL BINAIRE -->
             <div id="epreuve4" class="epreuve">
                 <div class="room-header">
-                    <h2>⚙️ CENTRALE DE DÉSAMORÇAGE - TERMINAL MAÎTRE</h2>
-                    <div class="room-code">ACCÈS FINAL</div>
+                    <h2>⚙️ CENTRALE DE DÉSAMORÇAGE</h2>
+                    <div class="room-code">NIVEAU FINAL</div>
                 </div>
                 <div class="room-content">
-                    <div class="interactive-object" data-object="mainframe">
+                    <div class="interactive-object" data-object="final-terminal" data-level="4">
                         <div class="object-icon">🖥️</div>
-                        <div class="object-name">Ordinateur maître</div>
+                        <div class="object-name">Terminal maître</div>
                     </div>
-                    <div class="interactive-object" data-object="panel">
+                    <div class="interactive-object" data-object="control-panel" data-level="4">
                         <div class="object-icon">🎛️</div>
-                        <div class="object-name">Panneau de contrôle</div>
+                        <div class="object-name">Panneau</div>
                     </div>
-                    <div class="interactive-object" data-object="timer">
+                    <div class="interactive-object" data-object="timer-device" data-level="4">
                         <div class="object-icon">⏱️</div>
-                        <div class="object-name">Compteur à rebours</div>
+                        <div class="object-name">Compteur</div>
                     </div>
                 </div>
                 <div class="room-view" id="view4">
-                    <div class="view-content hidden" id="view-mainframe">
+                    <div class="view-content hidden" id="view-final-terminal">
                         <div class="close-view">✖</div>
                         <h3>🖥️ TERMINAL MAÎTRE</h3>
                         <div class="final-screen">
-                            <p>SYSTÈME DE DÉSAMORÇAGE</p>
-                            <p>Entrez le code binaire du protocole "SNT"</p>
-                            <p>(S = 01010011, N = 01001110, T = 01010100)</p>
+                            <p>🔐 SYSTEME DE DÉSAMORÇAGE 🔐</p>
+                            <p>Entrez le code binaire du sigle trouvé dans la salle 3</p>
+                            <p>(Rappel: chaque lettre = 8 bits)</p>
                             <div class="final-input-area">
                                 <input type="text" id="final-code" placeholder="24 bits (ex: 010100110100111001010100)">
-                                <button id="final-submit">🚨 DÉSAMORCER LE TIMER 🚨</button>
+                                <button id="final-submit-preview">🚨 VALIDER LE CODE 🚨</button>
                             </div>
                             <div id="final-feedback"></div>
                         </div>
                     </div>
-                    <div class="view-content hidden" id="view-panel">
+                    <div class="view-content hidden" id="view-control-panel">
                         <div class="close-view">✖</div>
-                        <h3>🎛️ PANNEAU DE CONTRÔLE</h3>
-                        <p>Voyants : 🟢 🟡 🔴</p>
-                        <p>Le code binaire de "SNT" est la clé d'arrêt d'urgence.</p>
+                        <h3>🎛️ PANNEAU</h3>
+                        <p>Indicateurs :</p>
+                        <p>🟢 Alimentation OK</p>
+                        <p>🟡 En attente du code binaire...</p>
+                        <p>🔴 Timer actif</p>
                     </div>
-                    <div class="view-content hidden" id="view-timer">
+                    <div class="view-content hidden" id="view-timer-device">
                         <div class="close-view">✖</div>
-                        <h3>⏱️ COMPTEUR EXTERNE</h3>
-                        <p>Le timer est connecté à un dispositif externe.</p>
-                        <p>Il s'arrêtera uniquement avec le bon code final.</p>
-                        <div class="timer-warning">🔴 TEMPS RESTANT : 00:00:00 (dépend de ton timer externe)</div>
+                        <h3>⏱️ COMPTEUR</h3>
+                        <p>Le timer est indépendant (géré par l'enseignant).</p>
+                        <p>Le code binaire à entrer est celui du sigle <strong>SNT</strong>.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MESSAGE SYSTÈME -->
+        <!-- MESSAGE CONFIRMATION MODAL -->
+        <div id="confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h3>⚠️ CONFIRMATION ⚠️</h3>
+                <p>Êtes-vous sûr de vouloir entrer ce code ?</p>
+                <p>Le timer s'arrêtera définitivement.</p>
+                <div class="modal-buttons">
+                    <button id="confirm-yes">✅ OUI, arrêter le timer</button>
+                    <button id="confirm-no">❌ NON, je vérifie encore</button>
+                </div>
+            </div>
+        </div>
+
         <div id="system-message"></div>
     </div>
 

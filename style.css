@@ -26,6 +26,9 @@ body {
     border-bottom: 2px solid #ff4444;
     flex-wrap: wrap;
     gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo {
@@ -183,7 +186,7 @@ body {
     font-weight: 500;
 }
 
-/* ROOM VIEW (MODAL LIKE) */
+/* ROOM VIEW */
 .room-view {
     position: fixed;
     top: 0;
@@ -210,7 +213,7 @@ body {
     background: #11161f;
     border: 2px solid #3a4a5e;
     border-radius: 32px;
-    max-width: 600px;
+    max-width: 650px;
     width: 90%;
     padding: 30px;
     position: relative;
@@ -288,7 +291,7 @@ body {
     font-size: 0.85rem;
 }
 
-.config-panel, .safe-display, .whiteboard-text, .usb-note {
+.config-panel, .book-page, .whiteboard-text, .poster-content {
     background: #0c111c;
     padding: 15px;
     border-radius: 16px;
@@ -298,6 +301,14 @@ body {
 
 .config-line {
     margin: 5px 0;
+}
+
+.etiquette {
+    background: #1a281f;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border-left: 3px solid #88ff88;
 }
 
 .final-input-area {
@@ -316,15 +327,82 @@ body {
     margin-bottom: 15px;
 }
 
-#final-submit {
+#final-submit-preview {
     width: 100%;
     background: #aa3333;
     padding: 14px;
     font-size: 1.2rem;
+    border: none;
+    border-radius: 40px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-#final-submit:hover {
+#final-submit-preview:hover {
     background: #ff5500;
+}
+
+/* MODAL CONFIRMATION */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active-modal {
+    display: flex;
+}
+
+.modal-content {
+    background: #1a1f2a;
+    border-radius: 32px;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    border: 2px solid #ff8844;
+}
+
+.modal-content h3 {
+    color: #ff8844;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    margin: 10px 0;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#confirm-yes {
+    background: #aa3333;
+    color: white;
+}
+
+#confirm-no {
+    background: #2a5f7a;
+    color: white;
 }
 
 #system-message {
@@ -346,6 +424,17 @@ body {
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
+}
+
+pre {
+    font-family: monospace;
+    font-size: 0.7rem;
+    white-space: pre-wrap;
+}
+
+ul {
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 @media (max-width: 768px) {

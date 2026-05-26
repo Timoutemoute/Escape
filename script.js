@@ -1,81 +1,167 @@
 // ============================================
-// ESCAPE GAME SNT - Code vérificateur
-// Le code attendu pour stopper le TIMER EXTERNE
+// ESCAPE GAME SNT - 4 Épreuves
+// Code final : "SNT" en binaire = 010100110100111001010100
 // ============================================
 
-// 🔐 VOICI LE CODE SECRET (modifiable selon ton besoin)
-const SECRET_CODE = "01001100";   // "L" en binaire (ASCII 76)
+// Niveaux et solutions
+const solutions = {
+    1: "S",        // Épreuve 1 : "84 104 101 ... 83" = "The first key is : S"
+    2: "00000000", // Adresse réseau 192.168.1.0 => dernier octet 0 => binaire 00000000
+    3: "T",        // "S" + "N" + "T" = SNT (initiale Technologie)
+    4: "010100110100111001010100"  // "SNT" en binaire
+};
 
-// Références DOM
-const inputCode = document.getElementById("code-input");
-const verifyBtn = document.getElementById("verify-btn");
-const feedbackDiv = document.getElementById("message-feedback");
-const hintBtn = document.getElementById("hint-btn");
-const hintText = document.getElementById("hint-text");
+// État des niveaux
+let levelStatus = [false, false, false, false]; // level 1,2,3,4
+let currentLevel = 1;
 
-// Indice (déjà présent mais révélable)
-hintBtn.addEventListener("click", () => {
-    hintText.classList.toggle("hidden");
-    if (!hintText.classList.contains("hidden")) {
-        hintText.innerText = "🔍 Indice avancé : Le poster binaire dit : 'Le code entre les lettres du mot passe ?'. \nTraduction: 'Le code est entre les lettres du mot passe' = L entre Passe? L = 01001100 en binaire. Essaie ce code binaire !";
-    } else {
-        hintText.innerText = "";
+// Fonction pour afficher le niveau actif
+function updateLevelDisplay() {
+    for (let i = 1; i <= 4; i++) {
+        const levelDiv = document.getElementById(`level${i}`);
+        if (i === currentLevel) {
+            levelDiv.classList.add("active");
+        } else {
+            levelDiv.classList.remove("active");
+        }
     }
-});
+    // Mise à jour barre de progression
+    let completed = levelStatus.filter(v => v === true).length;
+    let percent = (completed / 4) * 100;
+    document.getElementById("progress-bar").style.width = `${percent}%`;
+}
 
-// Fonction de vérification
-function checkCode() {
-    const userCode = inputCode.value.trim();
-    
-    if (userCode === SECRET_CODE) {
-        // ✅ Succès : stopper le timer externe
-        feedbackDiv.innerHTML = "✅ ✅ ✅ CODE CORRECT ! ✅ ✅ ✅<br>⏹️ Vous pouvez maintenant ARRÊTER le TIMER externe (via votre gestionnaire de timer).<br>🎉 Félicitations, mission accomplie !";
-        feedbackDiv.style.color = "#a3ffb3";
-        feedbackDiv.style.backgroundColor = "#0a2f1a";
-        feedbackDiv.style.padding = "12px";
-        feedbackDiv.style.borderRadius = "24px";
-        
-        // Optionnel : envoyer un événement custom pour notifier l'extérieur (si timer écoute)
-        window.dispatchEvent(new CustomEvent("codeValide", { detail: { code: SECRET_CODE } }));
-        
-        // Désactiver le champ après succès pour éviter resubmit (optionnel)
-        inputCode.disabled = true;
-        verifyBtn.disabled = true;
-        verifyBtn.style.opacity = "0.6";
-    } 
-    else if (userCode === "") {
-        feedbackDiv.innerHTML = "⚠️ Entre un code (8 caractères recommandé)";
-        feedbackDiv.style.color = "#ffaa88";
-    }
-    else {
-        feedbackDiv.innerHTML = "❌ Code incorrect. Le timer continue son compte à rebours... Réessaie.";
-        feedbackDiv.style.color = "#ffa098";
-        // Efface après 2 secondes pour laisser le message
-        setTimeout(() => {
-            if (feedbackDiv.innerHTML.includes("incorrect")) {
-                feedbackDiv.innerHTML = "";
+// Gérer la validation par niveau
+function setupValidation() {
+    for (let i = 1; i <= 4; i++) {
+        const btn = document.querySelector(`.validate-btn[data-level='${i}']`);
+        if (!btn) continue;
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const inputField = document.getElementById(`level${i}-input`);
+            const userAnswer = inputField.value.trim();
+            const feedbackDiv = document.getElementById(`feedback${i}`);
+            
+            // Vérifier si le niveau est déjà débloqué
+            if (levelStatus[i-1] === true) {
+                feedbackDiv.innerHTML = "⚠️ Épreuve déjà validée ! Passe à la suite.";
+                feedbackDiv.style.color = "#ffb347";
+                return;
             }
-        }, 2000);
+            
+            // Vérifier si c'est le bon niveau actif
+            if (i !== currentLevel) {
+                feedbackDiv.innerHTML = "🔒 Tu dois d'abord valider l'épreuve précédente !";
+                feedbackDiv.style.color = "#ff8866";
+                return;
+            }
+            
+            // Comparaison
+            if (userAnswer === solutions[i]) {
+                // Succès
+                feedbackDiv.innerHTML = "✅ Épreuve validée ! Tu progresses.";
+                feedbackDiv.style.color = "#a3ffb3";
+                levelStatus[i-1] = true;
+                // Passer au niveau suivant si ce n'est pas le dernier
+                if (i < 4) {
+                    currentLevel = i+1;
+                    updateLevelDisplay();
+                    // Afficher un message global
+                    document.getElementById("global-message").innerHTML = `🎉 Épreuve ${i} réussie ! Niveau ${currentLevel} déverrouillé.`;
+                    setTimeout(() => {
+                        document.getElementById("global-message").innerHTML = "";
+                    }, 3000);
+                } else if (i === 4) {
+                    // VICTOIRE TOTALE
+                    document.getElementById("global-message").innerHTML = "🏆 CODE FINAL ACCEPTÉ ! 🏆<br>⏹️ TU PEUX DÉSACTIVER LE TIMER EXTERNE. BRAVO !";
+                    document.getElementById("global-message").style.background = "#0f3b1c";
+                    document.getElementById("global-message").style.padding = "12px";
+                    document.getElementById("global-message").style.borderRadius = "40px";
+                    // Déclencher événement pour timer externe
+                    window.dispatchEvent(new CustomEvent("gameCompleted", { detail: { code: solutions[4] } }));
+                }
+                updateLevelDisplay();
+                // Désactiver input de ce niveau (optionnel)
+                inputField.disabled = true;
+                btn.disabled = true;
+                btn.style.opacity = "0.6";
+            } else {
+                feedbackDiv.innerHTML = "❌ Code incorrect ! Réessaie.";
+                feedbackDiv.style.color = "#ff9f8f";
+                // Afficher le bouton indice après un échec (s'il n'est pas déjà visible)
+                const hintBtn = document.querySelector(`.hint-btn[data-level='${i}']`);
+                if (hintBtn && hintBtn.style.display === "none") {
+                    hintBtn.style.display = "inline-block";
+                    hintBtn.style.marginTop = "8px";
+                }
+                setTimeout(() => {
+                    if (feedbackDiv.innerHTML.includes("incorrect")) {
+                        feedbackDiv.innerHTML = "";
+                    }
+                }, 2000);
+            }
+        });
     }
 }
 
-verifyBtn.addEventListener("click", checkCode);
-
-// Permet d'envoyer avec la touche Entrée
-inputCode.addEventListener("keypress", (event) => {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        checkCode();
-    }
-});
-
-// Message d'accueil personnalisé pour rappeler le contexte
-window.addEventListener("load", () => {
-    console.log("Escape Game SNT prêt | Code secret défini : ", SECRET_CODE);
-    feedbackDiv.innerHTML = "💡 Saisis le bon code pour désactiver le timer ⏲️";
-    setTimeout(() => {
-        if (feedbackDiv.innerHTML.includes("Saisis le bon code")) {
-            feedbackDiv.innerHTML = "";
+// Configurer les indices pour chaque niveau (cachés au début)
+function setupHints() {
+    const hintsData = {
+        1: "🔎 Les nombres sont des codes ASCII décimaux. 84 = T, 104 = h, 101 = e... décode tout. La dernière valeur 83 = S. La première clé est cette lettre.",
+        2: "🧮 Adresse IP 192.168.1.45 & masque 255.255.255.0 → Adresse réseau = 192.168.1.0. Dernier octet = 0. Binaire de 0 = 00000000.",
+        3: "💡 SNT signifie Sciences Numériques et Technologie. La lettre manquante est la première de 'Technologie'."
+    };
+    
+    for (let i = 1; i <= 3; i++) {
+        const hintBtn = document.querySelector(`.hint-btn[data-level='${i}']`);
+        const hintDiv = document.getElementById(`hint${i}`);
+        if (hintBtn) {
+            hintBtn.addEventListener("click", () => {
+                if (hintDiv.style.display === "none") {
+                    hintDiv.style.display = "block";
+                    hintDiv.innerHTML = hintsData[i];
+                } else {
+                    hintDiv.style.display = "none";
+                }
+            });
         }
-    }, 4000);
-});
+    }
+}
+
+// Indice spécial pour niveau 4 (pas de bouton indice classique mais on peut donner un hint via console ou message)
+function addLevel4Helper() {
+    const level4Input = document.getElementById("level4-input");
+    const level4Feedback = document.getElementById("feedback4");
+    // On peut mettre un petit indice silencieux après 3 erreurs fictives
+    let errorCount4 = 0;
+    const originalValidate = document.querySelector(`.validate-btn[data-level='4']`);
+    if (originalValidate) {
+        const listener = originalValidate.addEventListener("click", () => {
+            if (levelStatus[3] === false && currentLevel === 4) {
+                const val = level4Input.value.trim();
+                if (val !== solutions[4] && val !== "") {
+                    errorCount4++;
+                    if (errorCount4 === 2) {
+                        level4Feedback.innerHTML = "💡 Petit indice : SNT en ASCII binaire (8 bits par lettre). S=83 => 01010011, N=78 => 01001110, T=84 => 01010100";
+                        level4Feedback.style.color = "#ffdb8e";
+                        setTimeout(() => {
+                            if (level4Feedback.innerHTML.includes("indice")) level4Feedback.innerHTML = "";
+                        }, 4000);
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Initialisation
+function initGame() {
+    setupValidation();
+    setupHints();
+    addLevel4Helper();
+    updateLevelDisplay();
+    // Message de bienvenue
+    console.log("Escape Game SNT - Prêt ! Le timer externe doit écouter l'événement 'gameCompleted'");
+}
+
+initGame();

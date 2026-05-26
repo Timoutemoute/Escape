@@ -3,63 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Escape Game SNT - Mission : Arrêter le timer</title>
+    <title>🔐 ESCAPE GAME SNT - Protocole ARGOS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <header>
-            <h1>🔐 ESCAPE GAME - SNT</h1>
-            <div class="mission">
-                <p>🚨 <strong>Mission :</strong> Trouvez le code secret pour désactiver le compte à rebours.</p>
-                <p>⏱️ Le timer extérieur tourne ! Vous avez 30 minutes dans la vraie vie.</p>
-                <p>💡 <em>Le code est composé de 8 caractères (binaire ou chiffres ? À vous de découvrir)</em></p>
-            </div>
-        </header>
-
-        <main>
-            <div id="room">
-                <h2>🖥️ Laboratoire SNT - Salle des Serveurs</h2>
-                <div class="item" id="poster">
-                    <h3>📜 Poster ASCII</h3>
-                    <pre>
-01001100 01100101 00100000 01100011 01101111 01100100 01100101 
-01110011 01110100 00100000 01100101 01101110 01110100 01110010 
-01100101 00100000 01101100 01100101 01110011 00100000 01101100 
-01100101 01110100 01110100 01110010 01100101 01110011 00100000 
-01100100 01110101 00100000 01101101 01101111 01110100 00100000 
-01100100 01100101 00100000 01110000 01100001 01110011 01110011 
-01100101 00100000 ? 
-                    </pre>
-                    <p class="indice">ℹ️ Ça ressemble à du binaire... mais quel est le message ?</p>
-                </div>
-
-                <div class="item" id="computer">
-                    <h3>💻 Terminal bloqué</h3>
-                    <p><strong>Message sur l'écran :</strong></p>
-                    <blockquote>
-                        "Accès restreint. Seul le mot de passe administrateur peut arrêter le timer.<br>
-                        Indice : Le code se trouve dans le poster, mais inversé et en ASCII."
-                    </blockquote>
-                    <p>🔑 Saisissez le code (8 caractères) :</p>
-                    <input type="text" id="code-input" placeholder="Ex: 01001100 ou L4b1n3?" autocomplete="off">
-                    <button id="verify-btn">✅ Vérifier le code</button>
-                    <p id="message-feedback"></p>
-                </div>
-
-                <div class="item" id="hint">
-                    <h3>🔎 Indice (si besoin)</h3>
-                    <button id="hint-btn">Afficher un indice</button>
-                    <p id="hint-text" class="hidden">Le binaire sur le poster se lit : "Le code est entre les lettres du mot passe ?". En ASCII, "Le code entre les lettres du mot passe" → le mot "passe" ? Quelle lettre manque ? Non… le code est la première lettre de chaque mot ? Essayez plutôt : traduisez "passe" en binaire, puis inversez l'ordre des bits.</p>
+    <div id="game-wrapper">
+        <div id="game-panel">
+            <div class="header">
+                <h1>🧠 PROTOCOLE ARGOS</h1>
+                <div class="subtitle">Escape Game - Sciences Numériques & Technologie (Niveau 2nde)</div>
+                <div class="alert-banner">
+                    ⚠️ TIMER EXTERNE ACTIF - 30 MINUTES POUR DÉSACTIVER ⚠️
                 </div>
             </div>
-        </main>
 
-        <footer>
-            <p>🧠 Escape game SNT - Niveau 2nde - Résolvez l'énigme pour stopper le timer ⏲️</p>
-        </footer>
+            <div id="level-container">
+                <!-- LEVEL 1 : Cryptage ASCII -->
+                <div class="level-card active" id="level1">
+                    <div class="level-header">
+                        <span class="level-num">ÉPREUVE 1/4</span>
+                        <span class="level-title">🔢 Décodage ASCII</span>
+                    </div>
+                    <div class="level-content">
+                        <p>Un technicien a laissé ce message dans les logs :</p>
+                        <div class="code-block">
+                            84 104 101 32 102 105 114 115 116 32 107 101 121 32 105 115 32 58 32 83
+                        </div>
+                        <p class="hint-question">💡 Ces nombres représentent des lettres en code ASCII décimal.</p>
+                        <div class="input-group">
+                            <input type="text" id="level1-input" placeholder="Entrez le mot trouvé...">
+                            <button class="validate-btn" data-level="1">✅ Valider Épreuve 1</button>
+                        </div>
+                        <div class="feedback" id="feedback1"></div>
+                        <button class="hint-btn" data-level="1" style="display:none;">🔍 Obtenir un indice</button>
+                        <div class="hint-text" id="hint1" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- LEVEL 2 : Binaire et réseau -->
+                <div class="level-card" id="level2">
+                    <div class="level-header">
+                        <span class="level-num">ÉPREUVE 2/4</span>
+                        <span class="level-title">🌐 Masque réseau & Binaire</span>
+                    </div>
+                    <div class="level-content">
+                        <p>Un serveur a l'adresse IP : <strong>192.168.1.45</strong> avec le masque <strong>255.255.255.0</strong></p>
+                        <p>L'administrateur a caché un code dans l'adresse réseau. <br>
+                        Convertissez le <strong>dernier octet de l'adresse réseau</strong> en binaire sur 8 bits.<br>
+                        (Rappel : adresse réseau = IP & Masque)</p>
+                        <div class="input-group">
+                            <input type="text" id="level2-input" placeholder="Binaire (8 bits)">
+                            <button class="validate-btn" data-level="2">✅ Valider Épreuve 2</button>
+                        </div>
+                        <div class="feedback" id="feedback2"></div>
+                        <button class="hint-btn" data-level="2" style="display:none;">🔍 Obtenir un indice</button>
+                        <div class="hint-text" id="hint2" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- LEVEL 3 : HTML / CSS / JS caché -->
+                <div class="level-card" id="level3">
+                    <div class="level-header">
+                        <span class="level-num">ÉPREUVE 3/4</span>
+                        <span class="level-title">🕸️ Code source mutilé</span>
+                    </div>
+                    <div class="level-content">
+                        <p>Un script JavaScript a été corrompu. Voici ce qu'il reste :</p>
+                        <div class="code-block">
+                            let secret = "S" + "N" + <span id="missing-part">[???]</span> ;<br>
+                            // Indice : La partie manquante est l'initiale de "Technologie"
+                        </div>
+                        <p>Complétez la chaîne (une seule lettre).</p>
+                        <div class="input-group">
+                            <input type="text" id="level3-input" placeholder="Lettre manquante">
+                            <button class="validate-btn" data-level="3">✅ Valider Épreuve 3</button>
+                        </div>
+                        <div class="feedback" id="feedback3"></div>
+                        <button class="hint-btn" data-level="3" style="display:none;">🔍 Obtenir un indice</button>
+                        <div class="hint-text" id="hint3" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- LEVEL 4 : Code final BINAIRE = "SNT" -->
+                <div class="level-card" id="level4">
+                    <div class="level-header">
+                        <span class="level-num">ÉPREUVE FINALE 4/4</span>
+                        <span class="level-title">⚙️ Code de désamorçage</span>
+                    </div>
+                    <div class="level-content">
+                        <p>Vous avez débloqué le terminal central. <br>
+                        Pour arrêter le timer, entrez le code binaire du mot <strong>"SNT"</strong> (sans espaces).</p>
+                        <div class="input-group">
+                            <input type="text" id="level4-input" placeholder="Binaire 24 bits (ex: 010100110100111001010100)">
+                            <button class="validate-btn" data-level="4">⛔ ARRÊTER LE TIMER</button>
+                        </div>
+                        <div class="feedback" id="feedback4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="global-message"></div>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

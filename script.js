@@ -1,167 +1,247 @@
 // ============================================
-// ESCAPE GAME SNT - 4 Épreuves
-// Code final : "SNT" en binaire = 010100110100111001010100
+// ESCAPE GAME SNT - 4 ÉPREUVES VERROUILLÉES
+// Code final : SNT en binaire = 010100110100111001010100
 // ============================================
 
-// Niveaux et solutions
-const solutions = {
-    1: "S",        // Épreuve 1 : "84 104 101 ... 83" = "The first key is : S"
-    2: "00000000", // Adresse réseau 192.168.1.0 => dernier octet 0 => binaire 00000000
-    3: "T",        // "S" + "N" + "T" = SNT (initiale Technologie)
-    4: "010100110100111001010100"  // "SNT" en binaire
+// SOLUTIONS
+const SOLUTIONS = {
+    1: "S",                              // Décodage ASCII: 83=S,84=T,78=N,... le message finit par S
+    2: "00010001",                       // IP 10.0.1.25 & Masque 255.255.255.240 -> Adresse réseau: 10.0.1.16 (dernier octet 16) -> binaire 00010001
+    3: "00011101",                       // XOR entre S(01010011) et N(01001110) = 00011101
+    4: "010100110100111001010100"        // SNT en binaire
 };
 
-// État des niveaux
-let levelStatus = [false, false, false, false]; // level 1,2,3,4
-let currentLevel = 1;
+// État du jeu
+let completedLevels = [false, false, false, false];
+let currentLevel = 1; // 1-indexed
 
-// Fonction pour afficher le niveau actif
-function updateLevelDisplay() {
-    for (let i = 1; i <= 4; i++) {
-        const levelDiv = document.getElementById(`level${i}`);
-        if (i === currentLevel) {
-            levelDiv.classList.add("active");
+// Éléments DOM
+const epreuves = document.querySelectorAll('.epreuve');
+const dots = document.querySelectorAll('.dot');
+const progressText = document.getElementById('progress-text');
+const systemMessage = document.getElementById('system-message');
+
+// Mise à jour de l'affichage (verrouillage progression)
+function updateProgression() {
+    // Mettre à jour les dots
+    dots.forEach((dot, idx) => {
+        if (completedLevels[idx]) {
+            dot.classList.add('completed');
+            dot.classList.remove('active');
+        } else if (idx + 1 === currentLevel) {
+            dot.classList.add('active');
+            dot.classList.remove('completed');
         } else {
-            levelDiv.classList.remove("active");
+            dot.classList.remove('active', 'completed');
         }
-    }
-    // Mise à jour barre de progression
-    let completed = levelStatus.filter(v => v === true).length;
-    let percent = (completed / 4) * 100;
-    document.getElementById("progress-bar").style.width = `${percent}%`;
+    });
+    
+    progressText.innerText = `Épreuve ${currentLevel}/4`;
+    
+    // Afficher la bonne épreuve
+    epreuves.forEach((ep, idx) => {
+        if (idx + 1 === currentLevel) {
+            ep.classList.add('active');
+        } else {
+            ep.classList.remove('active');
+        }
+    });
 }
 
-// Gérer la validation par niveau
-function setupValidation() {
-    for (let i = 1; i <= 4; i++) {
-        const btn = document.querySelector(`.validate-btn[data-level='${i}']`);
-        if (!btn) continue;
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            const inputField = document.getElementById(`level${i}-input`);
-            const userAnswer = inputField.value.trim();
-            const feedbackDiv = document.getElementById(`feedback${i}`);
+// Débloquer le niveau suivant
+function unlockNextLevel(currentLvl) {
+    if (currentLvl < 4) {
+        completedLevels[currentLvl - 1] = true;
+        currentLevel = currentLvl + 1;
+        updateProgression();
+        showSystemMessage(`✅ Épreuve ${currentLvl} réussie ! Niveau ${currentLevel} déverrouillé.`);
+        
+        // Si on a fini toutes les épreuves intermédiaires et qu'on arrive au niveau 4
+        if (currentLevel === 4) {
+            showSystemMessage("⚡ ACCÈS AU TERMINAL MAÎTRE - Trouvez le code binaire de SNT");
+        }
+    }
+}
+
+// Message système temporaire
+function showSystemMessage(msg, isError = false) {
+    systemMessage.innerText = msg;
+    systemMessage.style.background = isError ? "#2a1a1a" : "#1f2a1f";
+    systemMessage.style.borderLeftColor = isError ? "#ff6666" : "#88ff88";
+    setTimeout(() => {
+        if (systemMessage.innerText === msg) {
+            systemMessage.innerText = "";
+        }
+    }, 3000);
+}
+
+// Gestion des vues interactives (objets cliquables)
+function setupInteractiveObjects() {
+    const objects = document.querySelectorAll('.interactive-object');
+    objects.forEach(obj => {
+        obj.addEventListener('click', (e) => {
+            const objectType = obj.getAttribute('data-object');
+            const parentEpreuve = obj.closest('.epreuve');
+            const epreuveId = parentEpreuve.id; // "epreuve1", "epreuve2"...
+            const level = parseInt(epreuveId.replace('epreuve', ''));
             
-            // Vérifier si le niveau est déjà débloqué
-            if (levelStatus[i-1] === true) {
-                feedbackDiv.innerHTML = "⚠️ Épreuve déjà validée ! Passe à la suite.";
-                feedbackDiv.style.color = "#ffb347";
+            // Vérifier si le niveau est accessible
+            if (level !== currentLevel) {
+                showSystemMessage(`🔒 Épreuve ${level} verrouillée. Complétez l'épreuve ${currentLevel} d'abord.`, true);
                 return;
             }
             
-            // Vérifier si c'est le bon niveau actif
-            if (i !== currentLevel) {
-                feedbackDiv.innerHTML = "🔒 Tu dois d'abord valider l'épreuve précédente !";
-                feedbackDiv.style.color = "#ff8866";
-                return;
-            }
+            // Afficher la vue correspondante
+            const viewId = `view-${objectType}`;
+            const roomView = document.getElementById(`view${level}`);
+            const targetView = document.getElementById(viewId);
             
-            // Comparaison
-            if (userAnswer === solutions[i]) {
-                // Succès
-                feedbackDiv.innerHTML = "✅ Épreuve validée ! Tu progresses.";
-                feedbackDiv.style.color = "#a3ffb3";
-                levelStatus[i-1] = true;
-                // Passer au niveau suivant si ce n'est pas le dernier
-                if (i < 4) {
-                    currentLevel = i+1;
-                    updateLevelDisplay();
-                    // Afficher un message global
-                    document.getElementById("global-message").innerHTML = `🎉 Épreuve ${i} réussie ! Niveau ${currentLevel} déverrouillé.`;
-                    setTimeout(() => {
-                        document.getElementById("global-message").innerHTML = "";
-                    }, 3000);
-                } else if (i === 4) {
-                    // VICTOIRE TOTALE
-                    document.getElementById("global-message").innerHTML = "🏆 CODE FINAL ACCEPTÉ ! 🏆<br>⏹️ TU PEUX DÉSACTIVER LE TIMER EXTERNE. BRAVO !";
-                    document.getElementById("global-message").style.background = "#0f3b1c";
-                    document.getElementById("global-message").style.padding = "12px";
-                    document.getElementById("global-message").style.borderRadius = "40px";
-                    // Déclencher événement pour timer externe
-                    window.dispatchEvent(new CustomEvent("gameCompleted", { detail: { code: solutions[4] } }));
+            if (roomView && targetView) {
+                // Cacher toutes les vues dans cette room
+                const allViews = roomView.querySelectorAll('.view-content');
+                allViews.forEach(v => v.classList.add('hidden'));
+                targetView.classList.remove('hidden');
+                roomView.classList.add('active-view');
+                
+                // Gestion fermeture
+                const closeBtn = targetView.querySelector('.close-view');
+                if (closeBtn) {
+                    closeBtn.onclick = () => {
+                        roomView.classList.remove('active-view');
+                    };
                 }
-                updateLevelDisplay();
-                // Désactiver input de ce niveau (optionnel)
-                inputField.disabled = true;
-                btn.disabled = true;
-                btn.style.opacity = "0.6";
+            }
+        });
+    });
+    
+    // Fermer les vues en cliquant sur le fond
+    document.querySelectorAll('.room-view').forEach(view => {
+        view.addEventListener('click', (e) => {
+            if (e.target === view) {
+                view.classList.remove('active-view');
+            }
+        });
+    });
+}
+
+// Configuration des puzzles
+function setupPuzzles() {
+    // Puzzle 1 (ASCII)
+    const submit1 = document.getElementById('puzzle1-submit');
+    const input1 = document.getElementById('puzzle1-input');
+    const feedback1 = document.getElementById('puzzle1-feedback');
+    
+    if (submit1) {
+        submit1.addEventListener('click', () => {
+            if (currentLevel !== 1) {
+                showSystemMessage("Vous n'êtes pas au bon niveau !", true);
+                return;
+            }
+            const answer = input1.value.trim().toUpperCase();
+            if (answer === SOLUTIONS[1]) {
+                feedback1.innerText = "✅ BRAVO ! Code accepté.";
+                feedback1.style.color = "#88ff88";
+                unlockNextLevel(1);
+                // Désactiver le puzzle
+                input1.disabled = true;
+                submit1.disabled = true;
             } else {
-                feedbackDiv.innerHTML = "❌ Code incorrect ! Réessaie.";
-                feedbackDiv.style.color = "#ff9f8f";
-                // Afficher le bouton indice après un échec (s'il n'est pas déjà visible)
-                const hintBtn = document.querySelector(`.hint-btn[data-level='${i}']`);
-                if (hintBtn && hintBtn.style.display === "none") {
-                    hintBtn.style.display = "inline-block";
-                    hintBtn.style.marginTop = "8px";
-                }
-                setTimeout(() => {
-                    if (feedbackDiv.innerHTML.includes("incorrect")) {
-                        feedbackDiv.innerHTML = "";
-                    }
-                }, 2000);
+                feedback1.innerText = "❌ Code incorrect. Regardez mieux le message ASCII.";
+                feedback1.style.color = "#ff8888";
             }
         });
     }
-}
-
-// Configurer les indices pour chaque niveau (cachés au début)
-function setupHints() {
-    const hintsData = {
-        1: "🔎 Les nombres sont des codes ASCII décimaux. 84 = T, 104 = h, 101 = e... décode tout. La dernière valeur 83 = S. La première clé est cette lettre.",
-        2: "🧮 Adresse IP 192.168.1.45 & masque 255.255.255.0 → Adresse réseau = 192.168.1.0. Dernier octet = 0. Binaire de 0 = 00000000.",
-        3: "💡 SNT signifie Sciences Numériques et Technologie. La lettre manquante est la première de 'Technologie'."
-    };
     
-    for (let i = 1; i <= 3; i++) {
-        const hintBtn = document.querySelector(`.hint-btn[data-level='${i}']`);
-        const hintDiv = document.getElementById(`hint${i}`);
-        if (hintBtn) {
-            hintBtn.addEventListener("click", () => {
-                if (hintDiv.style.display === "none") {
-                    hintDiv.style.display = "block";
-                    hintDiv.innerHTML = hintsData[i];
-                } else {
-                    hintDiv.style.display = "none";
-                }
-            });
-        }
+    // Puzzle 2 (Réseau)
+    const submit2 = document.getElementById('puzzle2-submit');
+    const input2 = document.getElementById('puzzle2-input');
+    const feedback2 = document.getElementById('puzzle2-feedback');
+    
+    if (submit2) {
+        submit2.addEventListener('click', () => {
+            if (currentLevel !== 2) {
+                showSystemMessage("Accès refusé, complétez l'épreuve précédente !", true);
+                return;
+            }
+            const answer = input2.value.trim();
+            if (answer === SOLUTIONS[2]) {
+                feedback2.innerText = "✅ Adresse réseau validée !";
+                feedback2.style.color = "#88ff88";
+                unlockNextLevel(2);
+                input2.disabled = true;
+                submit2.disabled = true;
+            } else {
+                feedback2.innerText = "❌ Mauvais binaire. Calculez l'adresse réseau (IP & Masque) puis le dernier octet en binaire 8 bits.";
+                feedback2.style.color = "#ff8888";
+            }
+        });
     }
-}
-
-// Indice spécial pour niveau 4 (pas de bouton indice classique mais on peut donner un hint via console ou message)
-function addLevel4Helper() {
-    const level4Input = document.getElementById("level4-input");
-    const level4Feedback = document.getElementById("feedback4");
-    // On peut mettre un petit indice silencieux après 3 erreurs fictives
-    let errorCount4 = 0;
-    const originalValidate = document.querySelector(`.validate-btn[data-level='4']`);
-    if (originalValidate) {
-        const listener = originalValidate.addEventListener("click", () => {
-            if (levelStatus[3] === false && currentLevel === 4) {
-                const val = level4Input.value.trim();
-                if (val !== solutions[4] && val !== "") {
-                    errorCount4++;
-                    if (errorCount4 === 2) {
-                        level4Feedback.innerHTML = "💡 Petit indice : SNT en ASCII binaire (8 bits par lettre). S=83 => 01010011, N=78 => 01001110, T=84 => 01010100";
-                        level4Feedback.style.color = "#ffdb8e";
-                        setTimeout(() => {
-                            if (level4Feedback.innerHTML.includes("indice")) level4Feedback.innerHTML = "";
-                        }, 4000);
-                    }
-                }
+    
+    // Puzzle 3 (XOR)
+    const submit3 = document.getElementById('puzzle3-submit');
+    const input3 = document.getElementById('puzzle3-input');
+    const feedback3 = document.getElementById('puzzle3-feedback');
+    
+    if (submit3) {
+        submit3.addEventListener('click', () => {
+            if (currentLevel !== 3) {
+                showSystemMessage("Veuillez terminer l'épreuve précédente.", true);
+                return;
+            }
+            const answer = input3.value.trim();
+            if (answer === SOLUTIONS[3]) {
+                feedback3.innerText = "✅ XOR correct ! Niveau suivant déverrouillé.";
+                feedback3.style.color = "#88ff88";
+                unlockNextLevel(3);
+                input3.disabled = true;
+                submit3.disabled = true;
+            } else {
+                feedback3.innerText = "❌ Résultat XOR faux. Calculez S ⊕ N (binaire).";
+                feedback3.style.color = "#ff8888";
+            }
+        });
+    }
+    
+    // Puzzle Final (SNT binaire)
+    const finalSubmit = document.getElementById('final-submit');
+    const finalInput = document.getElementById('final-code');
+    const finalFeedback = document.getElementById('final-feedback');
+    
+    if (finalSubmit) {
+        finalSubmit.addEventListener('click', () => {
+            if (currentLevel !== 4) {
+                showSystemMessage("Le terminal n'est pas encore accessible !", true);
+                return;
+            }
+            const answer = finalInput.value.trim();
+            if (answer === SOLUTIONS[4]) {
+                finalFeedback.innerText = "🏆 CODE FINAL ACCEPTÉ ! TIMER DÉSACTIVÉ. 🏆";
+                finalFeedback.style.color = "#aaffaa";
+                finalFeedback.style.fontSize = "1.2rem";
+                completedLevels[3] = true;
+                updateProgression();
+                
+                // 🔥 ÉVÉNEMENT POUR LE TIMER EXTERNE
+                window.dispatchEvent(new CustomEvent("gameCompleted", { 
+                    detail: { code: SOLUTIONS[4], message: "SNT binaire validé" } 
+                }));
+                
+                showSystemMessage("🎉 Félicitations ! Vous avez désamorcé le timer externe.");
+                finalInput.disabled = true;
+                finalSubmit.disabled = true;
+            } else {
+                finalFeedback.innerText = "❌ Code binaire incorrect. SNT en binaire = S (01010011) + N (01001110) + T (01010100)";
+                finalFeedback.style.color = "#ff8888";
             }
         });
     }
 }
 
 // Initialisation
-function initGame() {
-    setupValidation();
-    setupHints();
-    addLevel4Helper();
-    updateLevelDisplay();
-    // Message de bienvenue
-    console.log("Escape Game SNT - Prêt ! Le timer externe doit écouter l'événement 'gameCompleted'");
+function init() {
+    updateProgression();
+    setupInteractiveObjects();
+    setupPuzzles();
 }
 
-initGame();
+init();

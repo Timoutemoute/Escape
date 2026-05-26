@@ -283,7 +283,7 @@ function setupPuzzles() {
     if (confirmYes) {
         confirmYes.addEventListener('click', () => {
             if (pendingFinalCode === SECRET_CODE) {
-                finalFeedback.innerText = "🏆 CODE FINAL ACCEPTÉ ! TIMER DÉSACTIVÉ. 🏆";
+                finalFeedback.innerText = "🏆 CODE FINAL ACCEPTÉ ! Mais pas selui du timer au tableau... (press F12)";
                 finalFeedback.style.color = "#aaffaa";
                 finalFeedback.style.fontSize = "1.2rem";
                 completedLevels[3] = true;

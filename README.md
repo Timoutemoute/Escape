@@ -17,4 +17,4 @@ Regardez attentivement le fichier `script.js`...
 Il contient un tableau `SOLUTIONS` avec les réponses des épreuves.
 
 Mais attention, la solution de l'épreuve 4 n'est pas la bonne clé pour arrêter le timer !
-** https://www.ascii-code.com/fr **
+**https://www.ascii-code.com/fr**

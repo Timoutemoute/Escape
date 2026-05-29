@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>🔐 ESCAPE GAME SNT - Désamorçage du Timer</title>
+    <title>🔐 ESCAPE GAME SNT - Protocole Argos</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
@@ -13,8 +13,8 @@
         <div id="top-bar">
             <div class="logo">⚠️ PROTOCOLE ARGOS ⚠️</div>
             <div class="timer-visual">
-                <span class="timer-label">TIMER EXTERNE</span>
-                <div class="timer-led active" id="timer-led"></div>
+                <span class="timer-label">⏱️ TIMER EXTERNE</span>
+                <div class="timer-led" id="timer-led"></div>
                 <span class="timer-status" id="timer-status-text">ACTIF</span>
             </div>
             <div class="progress-indicator">
@@ -29,280 +29,36 @@
         </div>
 
         <!-- ZONE DE JEU PRINCIPALE -->
-        <div id="game-area">
-            <!-- ÉPREUVE 1 : TABLE ASCII -->
-            <div id="epreuve1" class="epreuve active">
-                <div class="room-header">
-                    <h2>🖥️ LABO ASCII - Terminal 1984</h2>
-                    <div class="room-code">NIVEAU 1</div>
-                </div>
-                <div class="room-content">
-                    <div class="interactive-object" data-object="ascii-terminal" data-level="1">
-                        <div class="object-icon">📟</div>
-                        <div class="object-name">Terminal</div>
-                    </div>
-                    <div class="interactive-object" data-object="ascii-poster" data-level="1">
-                        <div class="object-icon">📜</div>
-                        <div class="object-name">Tableau pédagogique</div>
-                    </div>
-                    <div class="interactive-object" data-object="ascii-computer" data-level="1">
-                        <div class="object-icon">💻</div>
-                        <div class="object-name">Ordinateur</div>
-                    </div>
-                </div>
-                <div class="room-view" id="view1">
-                    <div class="view-content hidden" id="view-ascii-terminal">
-                        <div class="close-view">✖</div>
-                        <h3>📟 TERMINAL ASCII</h3>
-                        <div class="ascii-art">
-╔══════════════════════════════════════════════════════╗
-║  >> LOGS SYSTEME v1.0                               ║
-║                                                      ║
-║  Message encodé :                                    ║
-║                                                      ║
-║  83  84  78  32  69  115  116  32  108 101           ║
-║  32  99  111  100  101  32  100  101  32             ║
-║  108  97  32  112  114  101  109  105 101 114        ║
-║  101  32  101  115  116  32  58  32  83              ║
-║                                                      ║
-║  [ Table ASCII : 65=A, 66=B, 67=C ... ]              ║
-╚══════════════════════════════════════════════════════╝
-                        </div>
-                        <div class="puzzle-input">
-                            <label>🔐 Quelle est la LETTRE finale du message décodé ?</label>
-                            <input type="text" id="puzzle1-input" maxlength="1" placeholder="Lettre majuscule">
-                            <button id="puzzle1-submit">VALIDER</button>
-                            <div class="puzzle-feedback" id="puzzle1-feedback"></div>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-ascii-poster">
-                        <div class="close-view">✖</div>
-                        <h3>📜 TABLE ASCII</h3>
-                        <div class="poster-content">
-                            <pre>
-┌─────┬─────┬─────┬─────┐
-│ 65  │ 66  │ 67  │ 68  │
-│ A   │ B   │ C   │ D   │
-├─────┼─────┼─────┼─────┤
-│ 69  │ 70  │ 71  │ 72  │
-│ E   │ F   │ G   │ H   │
-├─────┼─────┼─────┼─────┤
-│ 73  │ 74  │ 75  │ 76  │
-│ I   │ J   │ K   │ L   │
-├─────┼─────┼─────┼─────┤
-│ 77  │ 78  │ 79  │ 80  │
-│ M   │ N   │ O   │ P   │
-├─────┼─────┼─────┼─────┤
-│ 81  │ 82  │ 83  │ 84  │
-│ Q   │ R   │ S   │ T   │
-├─────┼─────┼─────┼─────┤
-│ 85  │ 86  │ 87  │ 88  │
-│ U   │ V   │ W   │ X   │
-├─────┼─────┼─────┼─────┤
-│ 89  │ 90  │     │     │
-│ Y   │ Z   │     │     │
-└─────┴─────┴─────┴─────┘
-                            </pre>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-ascii-computer">
-                        <div class="close-view">✖</div>
-                        <h3>💻 ORDINATEUR</h3>
-                        <div class="computer-screen">
-                            <p>> Accès restreint</p>
-                            <p>> Niveau 1 : Décoder le message ASCII</p>
-                            <p>> Indice: 83 = S, 84 = T, 78 = N</p>
-                            <div class="blinking-cursor">_</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="game-area"></div>
 
-            <!-- ÉPREUVE 2 : RÉSEAU ET BINAIRE -->
-            <div id="epreuve2" class="epreuve">
-                <div class="room-header">
-                    <h2>🌐 SALLE RÉSEAU - Routeur Cisco</h2>
-                    <div class="room-code">NIVEAU 2</div>
-                </div>
-                <div class="room-content">
-                    <div class="interactive-object" data-object="router-config" data-level="2">
-                        <div class="object-icon">📡</div>
-                        <div class="object-name">Routeur</div>
-                    </div>
-                    <div class="interactive-object" data-object="switch-info" data-level="2">
-                        <div class="object-icon">🔌</div>
-                        <div class="object-name">Commutateur</div>
-                    </div>
-                    <div class="interactive-object" data-object="cable-info" data-level="2">
-                        <div class="object-icon">🔗</div>
-                        <div class="object-name">Documentation</div>
-                    </div>
-                </div>
-                <div class="room-view" id="view2">
-                    <div class="view-content hidden" id="view-router-config">
-                        <div class="close-view">✖</div>
-                        <h3>📡 ROUTEUR PRINCIPAL</h3>
-                        <div class="config-panel">
-                            <div class="config-line">Interface IP: 192.168.10.42</div>
-                            <div class="config-line">Subnet Mask: 255.255.255.224</div>
-                            <div class="config-line">Gateway: 192.168.10.1</div>
-                            <div class="config-line">━━━━━━━━━━━━━━━━━━</div>
-                            <div class="config-line">[CONFIGURATION]</div>
-                            <div class="config-line">Adresse réseau = IP & Masque</div>
-                            <div class="config-line">Dernier octet en BINAIRE ?</div>
-                        </div>
-                        <div class="puzzle-input">
-                            <label>🔐 Adresse réseau (dernier octet en binaire 8 bits)</label>
-                            <input type="text" id="puzzle2-input" placeholder="Ex: 00100000">
-                            <button id="puzzle2-submit">VALIDER</button>
-                            <div class="puzzle-feedback" id="puzzle2-feedback"></div>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-switch-info">
-                        <div class="close-view">✖</div>
-                        <h3>🔌 COMMUTATEUR</h3>
-                        <p>Étiquette technique :</p>
-                        <div class="etiquette">"Adresse réseau = Adresse IP AND Masque"</div>
-                        <div class="etiquette">"224 en binaire = 11100000"</div>
-                        <div class="etiquette">"42 en binaire = 00101010"</div>
-                    </div>
-                    <div class="view-content hidden" id="view-cable-info">
-                        <div class="close-view">✖</div>
-                        <h3>🔗 DOCUMENTATION RÉSEAU</h3>
-                        <p>Rappel : Masque /27 = 255.255.255.224</p>
-                        <p>Pour trouver l'adresse réseau :</p>
-                        <p>IP 192.168.10.42 AND 255.255.255.224 = 192.168.10.32</p>
-                        <p>Dernier octet = 32 → binaire = 00100000</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ÉPREUVE 3 : COMPRENDRE "SNT" (Niveau 2nde) -->
-            <div id="epreuve3" class="epreuve">
-                <div class="room-header">
-                    <h2>📚 SALLE DE COURS - Culture SNT</h2>
-                    <div class="room-code">NIVEAU 3</div>
-                </div>
-                <div class="room-content">
-                    <div class="interactive-object" data-object="textbook" data-level="3">
-                        <div class="object-icon">📖</div>
-                        <div class="object-name">Manuel SNT</div>
-                    </div>
-                    <div class="interactive-object" data-object="whiteboard-snt" data-level="3">
-                        <div class="object-icon">📋</div>
-                        <div class="object-name">Tableau blanc</div>
-                    </div>
-                    <div class="interactive-object" data-object="poster-snt" data-level="3">
-                        <div class="object-icon">🖼️</div>
-                        <div class="object-name">Affiche</div>
-                    </div>
-                </div>
-                <div class="room-view" id="view3">
-                    <div class="view-content hidden" id="view-textbook">
-                        <div class="close-view">✖</div>
-                        <h3>📖 MANUEL SNT</h3>
-                        <div class="book-page">
-                            <p><strong>Chapitre 1 : Qu'est-ce que la SNT ?</strong></p>
-                            <p>S.N.T. signifie <strong>Sciences Numériques et Technologie</strong>.</p>
-                            <p>C'est une matière enseignée en classe de 2nde.</p>
-                            <p>Les trois lettres forment un sigle important...</p>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-whiteboard-snt">
-                        <div class="close-view">✖</div>
-                        <h3>📋 TABLEAU BLANC</h3>
-                        <div class="whiteboard-text">
-                            <p>✏️ Quelqu'un a écrit :</p>
-                            <p style="font-size: 2rem; text-align: center; margin: 20px;">S N T</p>
-                            <p>En dessous : "Le code final est ce sigle"...</p>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-poster-snt">
-                        <div class="close-view">✖</div>
-                        <h3>🖼️ AFFICHE PÉDAGOGIQUE</h3>
-                        <div class="poster-content">
-                            <p>🎓 Programme de Seconde :</p>
-                            <ul>
-                                <li>Internet et le Web</li>
-                                <li>Réseaux sociaux</li>
-                                <li>Données structurées</li>
-                                <li>Algorithmique</li>
-                                <li><strong>SNT = Sciences Numériques & Technologie</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ÉPREUVE 4 : CODE FINAL BINAIRE -->
-            <div id="epreuve4" class="epreuve">
-                <div class="room-header">
-                    <h2>⚙️ CENTRALE DE DÉSAMORÇAGE</h2>
-                    <div class="room-code">NIVEAU FINAL</div>
-                </div>
-                <div class="room-content">
-                    <div class="interactive-object" data-object="final-terminal" data-level="4">
-                        <div class="object-icon">🖥️</div>
-                        <div class="object-name">Terminal maître</div>
-                    </div>
-                    <div class="interactive-object" data-object="control-panel" data-level="4">
-                        <div class="object-icon">🎛️</div>
-                        <div class="object-name">Panneau</div>
-                    </div>
-                    <div class="interactive-object" data-object="timer-device" data-level="4">
-                        <div class="object-icon">⏱️</div>
-                        <div class="object-name">Compteur</div>
-                    </div>
-                </div>
-                <div class="room-view" id="view4">
-                    <div class="view-content hidden" id="view-final-terminal">
-                        <div class="close-view">✖</div>
-                        <h3>🖥️ TERMINAL MAÎTRE</h3>
-                        <div class="final-screen">
-                            <p>🔐 SYSTEME DE DÉSAMORÇAGE 🔐</p>
-                            <p>Entrez le code binaire du sigle trouvé dans la salle 3</p>
-                            <p>(Rappel: chaque lettre = 8 bits)</p>
-                            <div class="final-input-area">
-                                <input type="text" id="final-code" placeholder="24 bits (ex: 010100110100111001010100)">
-                                <button id="final-submit-preview">🚨 VALIDER LE CODE 🚨</button>
-                            </div>
-                            <div id="final-feedback"></div>
-                        </div>
-                    </div>
-                    <div class="view-content hidden" id="view-control-panel">
-                        <div class="close-view">✖</div>
-                        <h3>🎛️ PANNEAU</h3>
-                        <p>Indicateurs :</p>
-                        <p>🟢 Alimentation OK</p>
-                        <p>🟡 En attente du code binaire...</p>
-                        <p>🔴 Timer actif</p>
-                    </div>
-                    <div class="view-content hidden" id="view-timer-device">
-                        <div class="close-view">✖</div>
-                        <h3>⏱️ COMPTEUR</h3>
-                        <p>Le timer est indépendant (géré par l'enseignant).</p>
-                        <p>Le code binaire à entrer est celui du sigle <strong>SNT</strong>.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MESSAGE CONFIRMATION MODAL -->
+        <!-- MODAL DE CONFIRMATION -->
         <div id="confirmation-modal" class="modal">
             <div class="modal-content">
                 <h3>⚠️ CONFIRMATION ⚠️</h3>
-                <p>Êtes-vous sûr de vouloir entrer ce code ?</p>
-                <p>Le timer s'arrêtera définitivement.</p>
+                <p>Êtes-vous sûr de vouloir valider ce code ?</p>
+                <p>Cette action est irréversible.</p>
                 <div class="modal-buttons">
-                    <button id="confirm-yes">✅ OUI, arrêter le timer</button>
-                    <button id="confirm-no">❌ NON, je vérifie encore</button>
+                    <button id="confirm-yes">✅ OUI, valider</button>
+                    <button id="confirm-no">❌ NON, vérifier</button>
                 </div>
             </div>
         </div>
-        <!-- https://github.com/Timoutemoute/Escape -->
+
+        <!-- ÉCRAN NOIR FINAL -->
+        <div id="black-screen" class="black-screen">
+            <div class="highlight-message">
+                <p>🔐 CODE VALIDÉ AVEC SUCCÈS 🔐</p>
+                <p>✨ ✨ ✨</p>
+                <p>Le code du timer externe n'est PAS dans cet escape game.</p>
+                <p>Il se trouve sur le site qui héberge ce jeu.</p>
+                <div class="small">[ Appuyez sur F5 pour rejouer ]</div>
+            </div>
+        </div>
+
         <div id="system-message"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="levels.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
